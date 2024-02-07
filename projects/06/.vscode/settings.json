@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"string": "cpp",
+		"ios": "cpp",
+		"bitset": "cpp",
+		"fstream": "cpp"
+	}
+}
