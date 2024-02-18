@@ -1,3 +1,0 @@
-/Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler/cmake-build-debug/CMakeFiles/hackAssembler.dir
-/Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler/cmake-build-debug/CMakeFiles/rebuild_cache.dir

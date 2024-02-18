@@ -1,4 +1,0 @@
-/private/var/folders/zz/zyxvpxvq6csfxvn_n000cx800037_0/T/AppTranslocation/C6F48190-BFE4-40F4-BB12-705B915FA8FF/d/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/private/var/folders/zz/zyxvpxvq6csfxvn_n000cx800037_0/T/AppTranslocation/C6F48190-BFE4-40F4-BB12-705B915FA8FF/d/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler -B /Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler/cmake-build-debug
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/junssong/Desktop/nand2Tetris/projects/06/hackAssembler/cmake-build-debug

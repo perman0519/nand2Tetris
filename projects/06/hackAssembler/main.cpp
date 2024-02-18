@@ -1,65 +1,68 @@
-#include "HackAssembler.h"
+#include "Parser.hpp"
+#include "Code.hpp"
+#include "SymbolTable.hpp"
+#include "HackAssembler.hpp"
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <string>
 
-int main(int argc, char *argv[])
+using namespace std;
+
+string  getFileName(string str)
 {
-    std::string fileStr(argv[1]);
-    std::fstream asmFile(fileStr, std::fstream::in);
-    fileStr.erase(fileStr.end() - 4, fileStr.end());
-    fileStr.append(".hack");
-    std::ofstream hackFile(fileStr, std::fstream::out);
-    while (!asmFile.eof())
+    return (str.substr(0, str.find(".")));
+}
+
+bool   isNumber(string str)
+{
+    for (unsigned long i = 0; i < str.size(); i++)
     {
-        std::string str;
-        std::getline(asmFile, str);
-        std::cout << check_str(str) << std::endl;
+        if (!('0' <= str.at(i) && str.at(i) <= '9'))
+            return (false);
     }
-    asmFile.close();
+    return (true);
 }
 
-std::string aInst(const std::string str)
+int main(int ac, char *av[])
 {
-	std::string a = str;
-	a = a.substr(1, a.size() - 1);
-	int aNum = std::atoi(a.c_str());
-	std::string ret = std::bitset<16>(aNum).to_string();
-	return ret;
-}
+    if (ac == 2)
+    {
+        string      fileName = getFileName(av[1]);
+        Parser      first(av[1]);
+        Parser      second(av[1]);
+        SymbolTable sTable;
+        Code        code;
+        ofstream    outfile(fileName.append(".hack"));
+        int         lineCount = 0;
 
-std::string cInst(const std::string str)
-{
-	std::string ret("111");
-	std::string dest, comp, jump;
-	int compPoint = str.find("=");
-	int jumpPoint = str.find(";");
-	if (compPoint != std::string::npos)
-		dest = str.substr(0, compPoint);
-	else if (jumpPoint != std::string::npos)
-		dest = str.substr(0, jumpPoint);
-	else
-		dest = str.substr(0, str.size() - 1);
-	if (compPoint != std::string::npos) {
-		if (jumpPoint != std::string::npos)
-			comp = str.substr(compPoint + 1, jumpPoint - compPoint);
-		else
-			comp = str.substr(compPoint + 1, jumpPoint - compPoint);
-	}
-	else
-		comp = nullptr;
-	if (jumpPoint != std::string::npos)
-		jump = str.substr(jumpPoint + 1, 3);
-	else
-		jump = nullptr;
-	std::cout << dest << std::endl << comp << std::endl << jump << std::endl;
-	return ret;
-}
-
-std::string check_str(const std::string str)
-{
-	if (str == "\n" || str.find("//") == 0)
-		return std::string("");
-	else if (str[0] == '@')
-		return aInst(str);
-	else
-		return cInst(str);
-		//TODO: C-instruction
+        while (first.hasMoreLines())
+        {
+            first.advance();
+            if (first.instructionType() == L_INSTRUC)
+                sTable.addEntry(first.symbol(), lineCount + 1);
+            else
+                lineCount++;
+        }
+        lineCount = 16;
+        while (second.hasMoreLines())
+        {
+            second.advance();
+            if (second.instructionType() == A_INSTRUC)
+            {
+                if (isNumber(second.symbol()))
+                    outfile << "0" << atoi(second.symbol().c_str()) << "/n";
+                else
+                {
+                    if (!sTable.contains(second.symbol()))
+                        sTable.addEntry(second.symbol(), lineCount++ + 1);
+                    outfile << "0" << code.toBinary(sTable.getAddress(second.symbol())) << "/n";
+                }
+            }
+            else if (second.instructionType() == C_INSTRUC)
+                outfile << "111" << code.comp(second.comp()) << code.comp(second.dest()) << code.jump(second.jump()) << "/n";
+        }
+    }
+    else
+        cout << "Argument Error" << endl;
 }
